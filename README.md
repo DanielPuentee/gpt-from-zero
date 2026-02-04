@@ -23,16 +23,17 @@ A complete implementation of a GPT-style decoder-only transformer built from scr
 
 ```
 transformer/
-├── config/             # Configuration files
-├── data/               # Training data
-├── checkpoints/        # Saved model checkpoints
-├── logs/               # Training logs
-├── notebooks/          # Educational Jupyter notebooks
-└── src/                # Source code
-    ├── components/     # Transformer components
-    ├── train_pretrain.py
-    ├── train_finetune.py
-    └── inference.py
+├── config/                 # Configuration files
+├── data/                   # Training data
+├── checkpoints/            # Saved model checkpoints
+├── logs/                   # Training logs
+├── notebooks/              # Educational notebooks of each .py of components/ folder
+└── src/                    # Source code
+    ├── components/         # Transformer components
+    ├── train_pretrain.py   # Training script with text files
+    ├── train_finetune.py   # Fine-tuning script with RLHF data (CSV)
+    ├── inference.ipynb     # Test the model in a notebook
+    └── inference.py        # Inference script
 ```
 
 ## 🧩 Understanding the Components (Bottom-Up Order)
