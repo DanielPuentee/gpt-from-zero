@@ -1,4 +1,8 @@
-# GPT-Style Transformer from Scratch
+# GPT-Style Model from Scratch
+
+<p align="center">
+  <img src="./imgs/model_flow.png" alt="Strands Agent Demo" width="1000"/>
+</p>
 
 [![Visual Studio Code](https://custom-icon-badges.demolab.com/badge/Visual%20Studio%20Code-0078d7.svg?logo=vsc&logoColor=white)](#)
 [![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff)](#)
