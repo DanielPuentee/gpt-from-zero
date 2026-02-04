@@ -58,14 +58,6 @@ Start here to understand the fundamentals:
   - Layer normalization for stabilizing training
   - Normalizes across feature dimension
 
-### 2. Combined Components (Mix of Multiple Files)
-
-These combine the basic blocks:
-
-- **[notebooks/input_embeddings.ipynb](notebooks/input_embeddings.ipynb)** → [src/components/input_embeddings.py](src/components/input_embeddings.py)
-  - **Combines:** `token_embedding.py` + `positional_encoding.py`
-  - Complete input processing: tokens → embeddings → positional encoding
-
 - **[notebooks/attention.ipynb](notebooks/attention.ipynb)** → [src/components/attention.py](src/components/attention.py)
   - Multi-head causal self-attention mechanism
   - Core of the transformer architecture
@@ -74,19 +66,94 @@ These combine the basic blocks:
   - Position-wise feed-forward network (MLP)
   - Expands then contracts feature dimension
 
-### 3. Transformer Block (Combines Attention + FFN)
+### 2. Combined Components (Mix of Multiple Files)
+
+These combine the basic blocks:
+
+- **[notebooks/input_embeddings.ipynb](notebooks/input_embeddings.ipynb)** → [src/components/input_embeddings.py](src/components/input_embeddings.py)
+  - **Combines:** `token_embedding.py` + `positional_encoding.py`
+  - Complete input processing: tokens → embeddings → positional encoding
 
 - **[notebooks/transformer_block.ipynb](notebooks/transformer_block.ipynb)** → [src/components/transformer_block.py](src/components/transformer_block.py)
   - **Combines:** `attention.py` + `feedforward.py` + `layer_norm.py`
   - Single transformer layer with residual connections
   - Architecture: LayerNorm → Attention → Add → LayerNorm → FFN → Add
 
-### 4. Complete Model (Everything Together)
+### 3. Complete Model (Everything Together)
 
 - **[notebooks/model.ipynb](notebooks/model.ipynb)** → [src/components/model.py](src/components/model.py)
   - **Combines:** `input_embeddings.py` + `transformer_block.py` (stacked N times)
   - Full GPT-style decoder-only transformer
   - Includes final layer norm and language modeling head
+
+## 🎓 How Training Works (Simple Explanation)
+
+### The Core Idea: Predict the Next Word
+
+The model learns by playing a simple game: **"Given these words, what comes next?"**
+
+#### Example
+
+```
+Text: "The cat sat on the mat"
+
+Training examples created automatically:
+```
+
+<div align="center">
+
+| **Input (see)** | **Target (guess)** |
+|-----------------|-------------------|
+| "The" | "cat" |
+| "The cat" | "sat" |
+| "The cat sat" | "on" |
+| "The cat sat on" | "the" |
+| ... | ... |
+
+</div>
+
+### The Training Loop
+
+```
+┌─────────────────────────────────────────┐
+│  1. Get batch of text                   │
+│     ["The cat sat..."]                  │
+│                                         │
+│  2. Convert to numbers (tokens)         │
+│     [23, 45, 89, 12, ...]               │
+│                                         │
+│  3. Model makes prediction              │
+│     "sat" → 60% confidence ✓            │
+│                                         │
+│  4. Calculate error (loss)              │
+│     Loss = how wrong was the guess?     │
+│                                         │
+│  5. Update weights (backpropagation)    │
+│     Adjust millions of numbers slightly │
+│                                         │
+│  6. Repeat millions of times            │
+│     Until predictions improve           │
+└─────────────────────────────────────────┘
+```
+
+### What the Model Learns
+
+<div align="center">
+
+| **After Training** | **Example** |
+|-------------------|-------------|
+| Grammar | "The cat sat" not "cat The sat" |
+| Facts | "Michael Jordan won 6 championships" |
+| Context | "basketball" follows "NBA" |
+| Style | How to answer questions |
+
+</div>
+
+### Key Points
+
+- **No human labels needed** → The text itself teaches the model
+- **Causal masking** → Model can only look at past words, not future
+- **Self-supervised** → Creates its own training data from raw text
 
 ## 🚀 Training Pipeline
 
@@ -162,7 +229,7 @@ Edit [config/config.json](config/config.json) to adjust:
     "n_heads": 4,            // Number of attention heads
     "n_layers": 4,           // Number of transformer blocks
     "d_ff": 512,             // Feedforward hidden dimension
-    "max_seq_len": 64,       // Maximum sequence length
+    "max_seq_len": 64,       // Maximum sequence length (window size)
     "dropout": 0.1           // Dropout rate
   },
   "training": {
@@ -195,11 +262,17 @@ Quick reference for which files are combinations:
 
 ## 🛠️ Requirements
 
-- Python 3.7+
+- Python 3.13.5
 - PyTorch
 - pandas (for fine-tuning)
 - loguru (logging)
 - tqdm (progress bars)
+
+## 📦 Installation
+
+```bash
+pip install -r requirements.txt
+```
 
 ## 📝 Notes
 
