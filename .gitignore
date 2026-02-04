@@ -15,8 +15,12 @@ ENV/
 checkpoints/*.pt
 !checkpoints/.gitkeep
 
+# Extra data files
+data_*
+fine_tune_data_*
+
 # Logs
-logs/
+logs/*
 *.log
 
 # IDE

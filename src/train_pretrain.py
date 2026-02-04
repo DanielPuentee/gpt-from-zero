@@ -95,19 +95,20 @@ def train(
     logger.info(f"Using device: {device}")
     
     # Train or load tokenizer
-    if os.path.exists(tokenizer_path):
-        logger.info(f"Loading tokenizer from {tokenizer_path}")
-        tokenizer = BPETokenizer(vocab_size=vocab_size)
-        tokenizer.load(tokenizer_path)
-    else:
-        logger.info("Training new tokenizer")
-        with open(data_path, 'r', encoding='utf-8') as f:
-            text = f.read()
-        
-        tokenizer = BPETokenizer(vocab_size=vocab_size)
-        tokenizer.train(text)
-        tokenizer.save(tokenizer_path)
-        logger.info(f"Tokenizer saved to {tokenizer_path}")
+    # if os.path.exists(tokenizer_path):
+    #     logger.info(f"Loading tokenizer from {tokenizer_path}")
+    #     tokenizer = BPETokenizer(vocab_size=vocab_size)
+    #     tokenizer.load(tokenizer_path)
+
+    # We will always train a new tokenizer for pretraining
+    logger.info("Training new tokenizer")
+    with open(data_path, 'r', encoding='utf-8') as f:
+        text = f.read()
+    
+    tokenizer = BPETokenizer(vocab_size=vocab_size)
+    tokenizer.train(text)
+    tokenizer.save(tokenizer_path)
+    logger.info(f"Tokenizer saved to {tokenizer_path}")
     
     # Create dataset and dataloader
     dataset = TextDataset(data_path, tokenizer, max_seq_len)
@@ -219,15 +220,6 @@ if __name__ == "__main__":
 
     # Train
     model, tokenizer = train(
-        data_path="data/data.txt",
-        vocab_size=1000,      # Small for testing, increase for real data
-        d_model=128,
-        n_heads=4,
-        n_layers=4,
-        d_ff=512,
-        max_seq_len=64,       # Small for testing
-        batch_size=8,
-        learning_rate=3e-4,
-        n_epochs=5,
-        device="cpu"          # Change to "cuda" if GPU available
+        **training_config,
+        **model_config
     )

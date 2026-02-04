@@ -1,24 +1,24 @@
 {
   "model": {
-    "vocab_size": 1000,
-    "d_model": 128,
-    "n_heads": 4,
-    "n_layers": 4,
-    "d_ff": 512,
-    "max_seq_len": 64,
-    "dropout": 0.1
+    "vocab_size": 3000,
+    "d_model": 256,
+    "n_heads": 8,
+    "n_layers": 6,
+    "d_ff": 1024,
+    "max_seq_len": 128,
+    "dropout": 0.15
   },
   "training": {
-    "batch_size": 8,
-    "learning_rate": 0.0003,
-    "n_epochs": 5,
+    "batch_size": 16,
+    "learning_rate": 0.0002,
+    "n_epochs": 20,
     "device": "cpu"
   },
   "finetuning": {
-    "pretrained_checkpoint": "model_epoch5.pt",
+    "pretrained_checkpoint": "model_epoch20.pt",
     "batch_size": 8,
     "learning_rate": 1e-5,
-    "n_epochs": 5,
+    "n_epochs": 30,
     "device": "cpu"
   }
 }

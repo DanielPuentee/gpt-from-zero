@@ -12,6 +12,10 @@ from tqdm import tqdm
 from components.bpe_tokenizer import BPETokenizer
 from components.model import GPTModel
 
+import json
+
+def load_config(config_path):
+    with open(config_path, 'r') as f: return json.load(f)
 
 class RatingDataset(Dataset):
     """
@@ -301,26 +305,15 @@ if __name__ == "__main__":
     logger.remove()
     logger.add(sys.stderr, level="INFO")
     logger.add("logs/finetune.log", rotation="10 MB", level="DEBUG")
-    
     os.makedirs("logs", exist_ok=True)
+
+    # Load config
+    config = load_config("config/config.json")
+    finetuning_config = config['finetuning']
+    format_config = config.get('format', {})
     
     # Fine-tune
     model = finetune(
-        data_path="data/fine_tune_data.csv",
-        pretrained_checkpoint="model_epoch5.pt",
-        max_seq_len=64,  # (same as pretraining)
-        batch_size=4,
-        learning_rate=1e-5,
-        n_epochs=5,
-        device="cpu"
+        **finetuning_config
     )
-    
-    data_path: str = "data/fine_tune_data.csv",
-    checkpoint_dir: str = "checkpoints",
-    pretrained_checkpoint: str = "model_epoch5.pt",
-    output_dir: str = "checkpoints",
-    max_seq_len: int = None,  # None = use pretrained model's value
-    batch_size: int = 8,
-    learning_rate: float = 1e-5,
-    n_epochs: int = 5,
-    device: str = "cpu"
+
