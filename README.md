@@ -19,10 +19,10 @@
 
 A complete implementation of a GPT-style decoder-only transformer built from scratch in PyTorch. This project includes modular components, training scripts, and interactive notebooks for learning and experimentation.
 
-## ✨ Training:
+## ✨ Training
 You can train the model just with a `data.txt` file containing raw text!!
 
-## ✨ Fine-tune with RLHF:
+## ✨ Fine-tune with RLHF
 Also you would be able to fine tune it using RLHF (prompt-response pairs with ratings) in a `fine_tune_data.csv` file.
 
 ## 📁 Project Structure
